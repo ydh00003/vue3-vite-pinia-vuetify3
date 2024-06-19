@@ -1,30 +1,66 @@
 <script setup lang="ts">
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive, onMounted, onUnmounted } from 'vue'
 import { useRoute } from 'vue-router'
 
-import type { News } from '@/types'
+import type { News, Ask, Jobs } from '@/types'
 
 import { useNewsStore } from '@/stores/news'
+
+import { useLoadingStore } from '@/stores/loading'
 import { storeToRefs } from 'pinia'
 
 const route = useRoute()
 const bSearching = ref(false)
 const pageNum = ref(1)
-const itemList: News[] = reactive([])
+const itemList: (News & Ask & Jobs)[] = reactive([])
 
 // News
 const newsStore = useNewsStore()
 const { getNewsList } = storeToRefs(newsStore)
 const { fetchNews } = newsStore
 
+// Ask
+
+// Jobs
+
+// Loading
+const loadingStore = useLoadingStore()
+const { showLoading, hideLoading } = loadingStore
+
+const hideLoadingAft500ms = () => {
+  setTimeout(() => {
+    hideLoading()
+    bSearching.value = false
+  }, 500)
+}
+
 const fetchData = () => {
+  showLoading()
+
   if (route.name == 'news') {
-    fetchNews(pageNum.value).then(() => {
-      itemList.length = 0
-      for (const newsInfo of getNewsList.value) {
-        itemList.push(newsInfo)
-      }
-    })
+    fetchNews(pageNum.value)
+      .then(hideLoadingAft500ms)
+      .then(() => {
+        itemList.length = 0
+        for (const newsInfo of getNewsList.value) {
+          itemList.push(newsInfo)
+        }
+      })
+  }
+}
+
+const scrollHandler = () => {
+  const elTrgt = document.getElementById('list-item') as HTMLDivElement
+
+  const scrollY = window.scrollY
+  const innerHeight = window.innerHeight
+  const scrollHeight = elTrgt.scrollHeight
+
+  if (!bSearching.value && scrollY + innerHeight >= scrollHeight + 100) {
+    pageNum.value = pageNum.value + 1
+    bSearching.value = true
+
+    fetchData()
   }
 }
 
@@ -33,6 +69,12 @@ onMounted(() => {
   bSearching.value = false
 
   fetchData()
+
+  document.addEventListener('scroll', scrollHandler)
+})
+
+onUnmounted(() => {
+  document.removeEventListener('scroll', scrollHandler)
 })
 </script>
 
@@ -52,6 +94,17 @@ onMounted(() => {
               <a :href="item.url" target="_blank"> {{ item.title }} </a>
             </template>
           </p>
+          <small class="link-text">
+            {{ item.time_ago }} by
+            <template v-if="item.type === 'job'">
+              <a :href="item.url" target="_blank"> ***: {{ item.domain }} </a>
+            </template>
+            <template v-else>
+              <router-link :to="`/user/${item.user}`" class="link-text">
+                {{ item.user }}
+              </router-link>
+            </template>
+          </small>
         </div>
       </li>
     </ul>
