@@ -5,14 +5,15 @@ import { useRoute } from 'vue-router'
 import type { News, Ask, Jobs } from '@/types'
 
 import { useNewsStore } from '@/stores/news'
+import { useAskStore } from '@/stores/ask'
 
 import { useLoadingStore } from '@/stores/loading'
 import { storeToRefs } from 'pinia'
 
-const route = useRoute()
 const bSearching = ref(false)
 const pageNum = ref(1)
 const itemList: (News & Ask & Jobs)[] = reactive([])
+const route = useRoute()
 
 // News
 const newsStore = useNewsStore()
@@ -20,6 +21,9 @@ const { getNewsList } = storeToRefs(newsStore)
 const { fetchNews } = newsStore
 
 // Ask
+const askStore = useAskStore()
+const { getAskList } = storeToRefs(askStore)
+const { fetchAsk } = askStore
 
 // Jobs
 
@@ -37,13 +41,22 @@ const hideLoadingAft500ms = () => {
 const fetchData = () => {
   showLoading()
 
-  if (route.name == 'news') {
+  if (route.name === 'news') {
     fetchNews(pageNum.value)
       .then(hideLoadingAft500ms)
       .then(() => {
         itemList.length = 0
         for (const newsInfo of getNewsList.value) {
           itemList.push(newsInfo)
+        }
+      })
+  } else if (route.name === 'ask') {
+    fetchAsk(pageNum.value)
+      .then(hideLoadingAft500ms)
+      .then(() => {
+        itemList.length = 0
+        for (const askInfo of getAskList.value) {
+          itemList.push(askInfo)
         }
       })
   }

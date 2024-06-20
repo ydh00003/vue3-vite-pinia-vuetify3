@@ -7,5 +7,7 @@ const config = {
 function fetchNewsList(page: number) {
   return axios.get(`${config.baseUrl}news/${page}.json`)
 }
-
-export { fetchNewsList }
+function fetchAskList(page: number) {
+  return axios.get(`${config.baseUrl}ask/${page}.json`)
+}
+export { fetchNewsList, fetchAskList }
