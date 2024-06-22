@@ -14,7 +14,10 @@ export const useUserStore = defineStore('user', () => {
 
   const getUserInfo = computed(() => userInfo)
 
-  async function fetchUser(userName: string) {
+  async function fetchUser(userName: string | undefined) {
+    if (userName === undefined) {
+      throw new Error('userNma is undefined')
+    }
     const { data } = await fetchUserInfo(userName)
     const userData = data as User
 
