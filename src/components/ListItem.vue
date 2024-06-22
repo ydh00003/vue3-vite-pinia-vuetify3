@@ -2,7 +2,7 @@
 import { ref, reactive, onMounted, onUnmounted } from 'vue'
 import { useRoute } from 'vue-router'
 
-import type { News, Ask, Jobs } from '@/common/types'
+import type { News, Ask, Jobs } from '@/common/ts/types'
 
 import { useNewsStore } from '@/stores/news'
 import { useAskStore } from '@/stores/ask'

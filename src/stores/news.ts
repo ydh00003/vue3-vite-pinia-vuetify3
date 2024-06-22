@@ -2,7 +2,7 @@ import { reactive, computed } from 'vue'
 import { defineStore } from 'pinia'
 
 import { fetchNewsList } from '@/api/index'
-import type { News } from '@/common/types'
+import type { News } from '@/common/ts/types'
 
 export const useNewsStore = defineStore('news', () => {
   //   const newsList: News[] = reactive([])
