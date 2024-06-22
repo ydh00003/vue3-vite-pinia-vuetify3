@@ -5,7 +5,8 @@ import { useUserStore } from '@/stores/user'
 
 import NewsView from '@/views/NewsView.vue'
 import AskView from '@/views/AskView.vue'
-import UserView from '../views/UserView.vue'
+import UserView from '@/views/UserView.vue'
+import ItemView from '@/views/ItemView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -28,6 +29,11 @@ const router = createRouter({
       name: 'user',
       path: '/user/:id',
       component: UserView
+    },
+    {
+      name: 'item',
+      path: '/item',
+      component: ItemView
     }
   ]
 })
