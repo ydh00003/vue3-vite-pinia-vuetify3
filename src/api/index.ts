@@ -7,7 +7,13 @@ const config = {
 function fetchNewsList(page: number) {
   return axios.get(`${config.baseUrl}news/${page}.json`)
 }
+
 function fetchAskList(page: number) {
   return axios.get(`${config.baseUrl}ask/${page}.json`)
 }
-export { fetchNewsList, fetchAskList }
+
+function fetchUserInfo(userName: string) {
+  return axios.get(`${config.baseUrl}user/${userName}.json`)
+}
+
+export { fetchNewsList, fetchAskList, fetchUserInfo }
