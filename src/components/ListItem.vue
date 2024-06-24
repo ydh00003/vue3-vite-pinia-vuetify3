@@ -6,6 +6,7 @@ import type { News, Ask, Jobs } from '@/common/ts/types'
 
 import { useNewsStore } from '@/stores/news'
 import { useAskStore } from '@/stores/ask'
+import { useJobsStore } from '@/stores/jobs'
 
 import { useLoadingStore } from '@/stores/loading'
 import { storeToRefs } from 'pinia'
@@ -26,6 +27,9 @@ const { getAskList } = storeToRefs(askStore)
 const { fetchAsk } = askStore
 
 // Jobs
+const jobsStore = useJobsStore()
+const { getJobsList } = storeToRefs(jobsStore)
+const { fetchJobs } = jobsStore
 
 // Loading
 const loadingStore = useLoadingStore()
@@ -57,6 +61,15 @@ const fetchData = () => {
         itemList.length = 0
         for (const askInfo of getAskList.value) {
           itemList.push(askInfo)
+        }
+      })
+  } else if (route.name === 'jobs') {
+    fetchJobs(pageNum.value)
+      .then(hideLoadingAft500ms)
+      .then(() => {
+        itemList.length = 0
+        for (const jobsInfo of getJobsList.value) {
+          itemList.push(jobsInfo)
         }
       })
   }

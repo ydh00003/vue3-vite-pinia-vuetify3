@@ -19,7 +19,8 @@ export const useUserStore = defineStore('user', () => {
       throw new Error('userNma is undefined')
     }
     const { data } = await fetchUserInfo(userName)
-    const userData = data as User
+    // const userData = data as User
+    const userData: User = data
 
     // for (const key of Object.keys(userData)) {
     //   const userKey = key as keyof User

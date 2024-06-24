@@ -5,6 +5,7 @@ import { useUserStore } from '@/stores/user'
 
 import NewsView from '@/views/NewsView.vue'
 import AskView from '@/views/AskView.vue'
+import JobsView from '@/views/JobsView.vue'
 import UserView from '@/views/UserView.vue'
 import ItemView from '@/views/ItemView.vue'
 
@@ -24,6 +25,11 @@ const router = createRouter({
       name: 'ask',
       path: '/ask',
       component: AskView
+    },
+    {
+      name: 'jobs',
+      path: '/jobs',
+      component: JobsView
     },
     {
       name: 'user',
